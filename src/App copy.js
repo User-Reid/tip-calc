@@ -15,33 +15,35 @@ function TipCalculator() {
 
   return (
     <div>
-      <Bill bill={bill} setBill={setBill} />
-      <Survey perc={perc} setPerc={setPerc}>
+      <Bill setBill={setBill} bill={bill}>
+        How much was the bill?
+      </Bill>
+      <Questions perc={perc} setPerc={setPerc}>
         How did you like the service?
-      </Survey>
-      <Survey perc={perc2} setPerc={setPerc2}>
+      </Questions>
+      <Questions perc={perc2} setPerc={setPerc2}>
         How did your friend like the service?
-      </Survey>
+      </Questions>
       <Calculation bill={bill} perc={perc} perc2={perc2} />
       <Reset setBill={setBill} setPerc={setPerc} setPerc2={setPerc2} />
     </div>
   );
 }
 
-function Bill({ bill, setBill }) {
+function Bill({ children, setBill, bill }) {
   return (
     <div className="block">
-      <h4>How much was the bill?</h4>
+      <h4>{children}</h4>
       <input
-        placeholder="Enter Bill Amount"
-        onChange={(e) => setBill(Number(e.target.value))}
+        placeholder="Bill Value"
         value={bill}
+        onChange={(e) => setBill(Number(e.target.value))}
       />
     </div>
   );
 }
 
-function Survey({ perc, setPerc, children }) {
+function Questions({ children, perc, setPerc }) {
   return (
     <div className="block">
       <h4>{children}</h4>
@@ -55,13 +57,11 @@ function Survey({ perc, setPerc, children }) {
   );
 }
 
-function Calculation({ perc, perc2, bill }) {
-  const tipPercent = (perc + perc2) / 2 / 100;
-  console.log(tipPercent);
-  const tip = tipPercent * bill;
-  const total = bill + tip;
+function Calculation({ bill, perc, perc2 }) {
+  const total = bill + (perc + perc2) / 2;
+  const tip = (perc + perc2) / 2;
 
-  return <h2>{`You pay $${total} ($${bill} + ${tipPercent}% tip)`}</h2>;
+  return <h2>{`You pay $${total} ($${bill} + ${tip}% tip)`}</h2>;
 }
 
 function Reset({ setBill, setPerc, setPerc2 }) {
